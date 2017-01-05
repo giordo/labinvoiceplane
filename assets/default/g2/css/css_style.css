@@ -1,0 +1,60 @@
+/* Put your css in here */
+.popover-content .input-group input.form-control{
+  width: 100px;
+}
+.popover-content .input-group {
+  padding-top:3px;
+}
+
+.radio-label{
+  width: 80px;
+}
+.my-addon{
+  min-width: 100px;
+}
+.rlabel{
+  vertical-align:middle;
+  padding: 6px 12px;
+  display: table-cell;
+  width: 80px;
+}
+
+uib-tab-heading{
+  
+}
+ul.nav-tabs li:not(.active) a .close-heading{
+  color: red;
+  display:none;
+}
+
+ul.nav-tabs li{
+    width:200px;
+}
+
+ul.nav-tabs li:last-of-type a{
+    width:50px;
+    background-color: aliceblue;
+}
+
+.nav-tabs>li>a{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background-color: #f9f9f9;
+  }
+
+span.close-heading{
+ display: none;
+}
+
+li.active span.close-heading, li:hover span.close-heading{
+  display: block;
+  position: absolute;
+  margin-top: 0px;
+  margin-left: 165px;
+  cursor:pointer;
+}
+
+body div{
+  padding: 6px;
+}

@@ -1,0 +1,88 @@
+/* =============================================================================
+   InvoicePlane
+   Custom Stylesheet
+
+   All changes made in this file will override the default styles.
+   ========================================================================== */
+
+li:has( > #tabs-99){
+    float:right;
+}
+.ui-tabs .ui-tabs-nav li.ui-state-default {
+    border: 1px solid #e5e5e5;
+    background-color: #e5e5e5;
+    border-bottom: 0px;
+}
+
+.ui-tabs .ui-tabs-nav li span {
+    border: 0px;
+    background-color: inherit;
+}
+
+.ui-tabs .ui-tabs-nav li a {
+    border: 0px;
+    border-radius: 4px 0 0 0;
+    background-color: inherit;
+}
+.ui-tabs .ui-tabs-nav li a:hover {
+    border: 0px;
+}
+.ui-tabs .ui-tabs-nav li:hover {
+    border: 0px;
+    border: 1px solid #e5e5e5;
+    border-bottom: 0px;
+    background-color: #ededed;
+}
+
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-active{
+    border: 1px solid #e5e5e5;
+    border-bottom: 0px;
+    background-color: white;
+}
+.ui-tabs .ui-tabs-nav li.ui-tabs-active a {
+    border: 0px;
+    border-radius: 4px 0 0 0;
+    background-color: white;
+}
+.ui-tabs .ui-tabs-nav li.ui-tabs-active span {
+    border: 0px;
+    background-color: inherit;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-active:hover{
+    border: 1px solid #e5e5e5;
+    border-bottom: 0px;
+    background-color: #e5e5e5;
+}
+.ui-tabs .ui-tabs-nav li.ui-tabs-active a:hover {
+    border: 0px;
+    background-color: white;
+}
+.ui-tabs .ui-tabs-nav li.ui-tabs-active span:hover {
+    border: 0px;
+    background-color: inherit;
+}
+.ui-tabs .ui-tabs-nav li ul li.checkbox{
+    width: 100%;
+    height: 24px;
+}
+.ui-tabs .ui-tabs-nav li.tabs99{
+    float:right;
+}
+.quote .cf{
+    margin-bottom: 2px;
+}
+table.tbl-sortable {
+    border-collapse:collapse;
+    width: 100%;
+}
+tr.tr-sortable {
+    border: 1px solid #e8e8e8;
+    padding:2px 15px 2px 15px;
+    width:50px;
+}
+tr.tr-sortable td {
+    padding:2px 15px 2px 15px;
+    width:50px;
+}

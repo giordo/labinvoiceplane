@@ -1,0 +1,100 @@
+<script type="text/ng-template" id="detailPopoverTemplate.html">
+  <div class="input-group">
+    <span class="rlabel">null</span>
+    <span class="input-group-addon">
+      <input value="nullValue" ng-model="tmp.item.details[tmp.indexPopover].selected.price_mode" type="radio">
+    </span>
+    <input disabled type="text" class="form-control" value="Valore vuoto">
+  </div>
+  <div class="input-group">
+    <span class="rlabel">listino</span>
+    <span class="input-group-addon">
+      <input value="current" ng-model="tmp.item.details[tmp.indexPopover].selected.price_mode" type="radio">
+    </span>
+    <!--<span class="input-group-addon radio-label" id="basic-addon1">listino</span>-->
+    <input disabled type="number" class="form-control" ng-model="tmp.item.details[tmp.indexPopover].selected.price_current">
+  </div>
+
+  <div class="input-group" ng-class="{'has-error': myForm.myDecimal.$invalid}">
+    <span class="rlabel">manuale</span>
+    <span class="input-group-addon">
+      <input value="manual"  ng-model="tmp.item.details[tmp.indexPopover].selected.price_mode" type="radio" >
+    </span>
+    <!--<span class="input-group-addon radio-label" >manual</span>-->
+    <input type="number" class="form-control" ng-model="tmp.item.details[tmp.indexPopover].selected.price_manual" step="0.01">
+  </div>
+</script>
+
+<script type="text/ng-template" id="itemPopoverTemplate.html">
+  <div class="input-group">
+    <span class="rlabel">null</span>
+    <span class="input-group-addon">
+      <input value="nullValue" ng-model="tmp.item.price_mode" type="radio">
+    </span>
+    <input disabled type="text" class="form-control" value="Valore vuoto">
+  </div>
+  <div class="input-group">
+    <span class="rlabel">listino</span>
+    <span class="input-group-addon">
+      <input value="current" ng-model="tmp.item.price_mode" type="radio">
+    </span>
+    <!--<span class="input-group-addon radio-label" id="basic-addon1">listino</span>-->
+    <input disabled type="number" class="form-control" ng-model="tmp.item.price_current">
+  </div>
+
+  <div class="input-group" ng-class="{'has-error': myForm.myDecimal.$invalid}">
+    <span class="rlabel">manuale</span>
+    <span class="input-group-addon">
+      <input value="manual"  ng-model="tmp.item.price_mode" type="radio" >
+    </span>
+    <!--<span class="input-group-addon radio-label" >manual</span>-->
+    <input type="number" class="form-control" ng-model="tmp.item.price_manual" step="0.01">
+  </div>
+</script>
+
+<div class="modal-header">
+  <h4>{{tmp.item.label}}</h4>
+</div>
+<div class="modal-body">
+
+  <div class="row">
+    <div class="col-xs-6">row price: {{tmp.item.total_price | currency : "€ "}}</div>
+    <div class="col-xs-6">row total: {{tmp.item.total_row_price | currency : "€ "}}</div>
+  </div>
+
+  <form id="item_detail" class="form-horizontal" ng-submit="submit()">
+    <div class="form-group" ng-repeat="need in tmp.item.needs | filter:{ mode: 'input' }">
+      <label for="{{need.code}}" class="col-sm-3 control-label">{{need.name}}</label>
+      <div class="col-sm-8">
+        <input type="{{need.type}}" class="form-control" id="{{need.code}}" placeholder="{{need.name}}" ng-model="tmp.item[need.code]" \>
+      </div>
+    </div>
+
+    <div class='form-group'>
+      <label for="tmp.item.code" class="col-sm-3 control-label">{{tmp.item.code}}</label>
+      <div class="col-sm-8">
+        <div class="input-group">
+          <input type="text" class="form-control" id="tmp.item.code" ng-model="tmp.item.label" \>
+          <span popover-append-to-body="false" ng-click="openPopover($index); " popover-trigger="'outsideClick'" uib-popover-template="'itemPopoverTemplate.html'" class="input-group-addon my-addon item-price-{{tmp.item.price_mode}}">{{tmp.item.price | currency : "€ "}}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group" ng-repeat="detail in tmp.item.details">
+      <label for="{{detail.code}}" class="col-sm-3 control-label">{{detail.name}}</label>
+      <div class="col-sm-8">
+        <div class="input-group">
+          <select class="form-control" data-ng-options="o.name for o in detail.options track by o.code" data-ng-model="detail.selected" ng-change="updateDetail(detail)"></select>
+          <span popover-append-to-body="false" ng-click="openPopover($index); " popover-trigger="'outsideClick'" uib-popover-template="'detailPopoverTemplate.html'" class="input-group-addon my-addon detail-price-{{detail.selected.price_mode}}">{{detail.selected.price | currency : "€ "}}</span>
+        </div>
+      </div>
+    </div>
+  </form>
+  <pre>
+    {tmp.item | json}
+  </pre>
+</div>
+<div class="modal-footer">
+  <input type="submit" class="btn btn-primary" ng-click="ok()" value="Save" />
+  <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>
