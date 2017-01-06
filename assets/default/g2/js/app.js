@@ -47,14 +47,14 @@ angular.module('ui.bootstrap.demo')
         }
       }
     }])
-  .controller('AppCtrl', function($scope, $uibModal, $log, $timeout, $templateCache, safeApply) {
+  .controller('AppCtrl', function( $scope, $uibModal, $log, $timeout, $templateCache, safeApply) {
     //var $ctrl = this;
     // droppable http://ngmodules.org/modules/ng-sortable
     // http://marceljuenemann.github.io/angular-drag-and-drop-lists/demo/#/advanced
 
     var rm = 0;
 
-    if(rm === 1)
+      if(rm === 1)
       $templateCache.removeAll();
 
     $templateCache.put("uib/template/tabs/tabset.html",
@@ -75,6 +75,14 @@ $scope.getCurrentTab = function(e){
     e.preventDefault();
   
 };
+
+      $scope.getTemplate = function(mode){
+          console.log("mode"+mode);
+          if (mode)
+              return "mode" + mode ;
+          else
+              return 'modeauto';
+      };
 
     $scope.tmp = {};
     $scope.tmp.tabCounter = 1;
@@ -148,8 +156,6 @@ $scope.getCurrentTab = function(e){
     $scope.tabRemove = function(i, e){
       $timeout(function() {
         $scope.tabs.splice($scope.tmpYesNo.idx, 1);
-        //console.log($scope.tmpYesNo.idx);
-        //r = ($scope.tmpYesNo.idx > 0)? $scope.tmpYesNo.idx - 1: 0;
         r = (i > 0)? i - 1: 0;
         $scope.tmp.tabSelected = r;
         
@@ -239,11 +245,19 @@ $scope.getCurrentTab = function(e){
         }
       }
 
+        console.log($scope.tmp.item);
+
+        function ts(){
+            var d = new Date();
+            return d.getTime();
+        };
+
+
       var modalDetailInstance = $uibModal.open({
         animation: true,
         ariaLabelledBy: 'modal-title',
         ariaDescribedBy: 'modal-body',
-        templateUrl: '../../assets/default/g2/tpl/tpl_modal-select-detail.html',
+        templateUrl: '../../assets/default/g2/tpl/tpl_modal-select-detail.html?'+timestamp(),
         controller: 'ModalSelectDetailCtrl',
         backdrop: true,
         size: size,

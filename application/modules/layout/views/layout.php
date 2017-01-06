@@ -64,14 +64,14 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.js"></script>
     <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.1.3.js"></script>
 
-    <script src="<?php echo base_url(); ?>assets/default/g2/js/js_json.js"></script>
-    <script src="<?php echo base_url(); ?>assets/default/g2/js/js_utility.js"></script>
-    <script src="<?php echo base_url(); ?>assets/default/g2/js/js_angular-tree-control.js"></script>
-    <script src="<?php echo base_url(); ?>assets/default/g2/js/sortable.js"></script>
-    <script src="<?php echo base_url(); ?>assets/default/g2/js/app.js"></script>
-    <script src="<?php echo base_url(); ?>assets/default/g2/js/js_modal-select-detail.js"></script>
-    <script src="<?php echo base_url(); ?>assets/default/g2/js/js_modal-select-item.js"></script>
-    <script src="<?php echo base_url(); ?>assets/default/g2/js/js_modal-yesno.js"></script>
+    <script src="<?php echo base_url(); ?>assets/default/g2/js/js_json.js?<?php echo time(); ?>"></script>
+    <script src="<?php echo base_url(); ?>assets/default/g2/js/js_utility.js?<?php echo time(); ?>"></script>
+    <script src="<?php echo base_url(); ?>assets/default/g2/js/js_angular-tree-control.js?<?php echo time(); ?>"></script>
+    <script src="<?php echo base_url(); ?>assets/default/g2/js/sortable.js?<?php echo time(); ?>"></script>
+    <script src="<?php echo base_url(); ?>assets/default/g2/js/app.js?<?php echo time(); ?>"></script>
+    <script src="<?php echo base_url(); ?>assets/default/g2/js/js_modal-select-detail.js?<?php echo time(); ?>"></script>
+    <script src="<?php echo base_url(); ?>assets/default/g2/js/js_modal-select-item.js?<?php echo time(); ?>"></script>
+    <script src="<?php echo base_url(); ?>assets/default/g2/js/js_modal-yesno.js?<?php echo time(); ?>"></script>
 
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet">
 

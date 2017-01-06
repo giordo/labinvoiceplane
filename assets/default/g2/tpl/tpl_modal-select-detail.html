@@ -1,3 +1,15 @@
+<script type="text/ng-template" id="mode-select">
+    <div class="input-group">
+        <select class="form-control" data-ng-options="o.name for o in detail.options track by o.code" data-ng-model="detail.selected" ng-change="updateDetail(detail)"></select>
+        <span popover-append-to-body="false" ng-click="openPopover($index); " popover-trigger="'outsideClick'" uib-popover-template="'detailPopoverTemplate.html'" class="input-group-addon my-addon detail-price-{{detail.selected.price_mode}}">{{detail.selected.price | currency : "€ "}}</span>
+    </div>
+</script>
+<script type="text/ng-template" id="mode-input">
+    <div class="input-group">
+        <input type="text" class="form-control" id="detail.code" ng-model="detail.value" \>
+        <span popover-append-to-body="false" ng-click="openPopover($index); " popover-trigger="'outsideClick'" uib-popover-template="'detailPopoverTemplate.html'" class="input-group-addon my-addon detail-price-{{detail.price_mode}}">{{detail.selected.price | currency : "€ "}}</span>
+    </div>
+</script>
 <script type="text/ng-template" id="detailPopoverTemplate.html">
   <div class="input-group">
     <span class="rlabel">null</span>
@@ -82,19 +94,17 @@
 
     <div class="form-group" ng-repeat="detail in tmp.item.details">
       <label for="{{detail.code}}" class="col-sm-3 control-label">{{detail.name}}</label>
-      <div class="col-sm-8">
-        <div class="input-group">
-          <select class="form-control" data-ng-options="o.name for o in detail.options track by o.code" data-ng-model="detail.selected" ng-change="updateDetail(detail)"></select>
-          <span popover-append-to-body="false" ng-click="openPopover($index); " popover-trigger="'outsideClick'" uib-popover-template="'detailPopoverTemplate.html'" class="input-group-addon my-addon detail-price-{{detail.selected.price_mode}}">{{detail.selected.price | currency : "€ "}}</span>
-        </div>
+      <div class="col-sm-8" ng-include="detail.mode">
+
       </div>
     </div>
   </form>
-  <pre>
-    {tmp.item | json}
-  </pre>
+
 </div>
 <div class="modal-footer">
   <input type="submit" class="btn btn-primary" ng-click="ok()" value="Save" />
   <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
 </div>
+<pre>
+    {{tmp.item | json}}
+  </pre>

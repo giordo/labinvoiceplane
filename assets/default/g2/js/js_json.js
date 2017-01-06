@@ -1,33 +1,15 @@
 /*
  *** METODI
 
- var method_area4CalcPrices = {
- method: 'area4CalcPrices',
- method_args: {
- method: 'maxOf', //fixed, //minOf
- method_args: {values: ['tmp.item.area', 'min'], ret: 'qty'},
- multiple: 1,
- min: 0.5
- },
- override: 'method_args_default'
- };
-
- var method_args_vetro = {
- method: 'maxOf', //fixed, //min
- method_args: {values: ['tmp.item.area', 'min'], ret: 'qty'},
- multiple: 1,
- min: 0.5
- };
-
  *** NEEDS (var needs) FANNO RIFERIMENTO AL
  *name
  *code
  *value
  *type -- number | text
- *mode -- input | auto === calc | gluecode !!!!!!!!!!!!!
- method -- null | calc | str_lpad
- watch
- method_args
+ *mode -- input | auto
+ method -- null | calc | gluecode
+ watch (string)
+ method_args (string - object)
 
 
 
@@ -56,64 +38,46 @@
 
  */
 
-
-
-    var method_area4CalcPrices = {
-      method: 'area4CalcPrices',
-      method_args: {
-        method: 'maxOf', //fixed, //minOf
-        method_args: {values: ['tmp.item.area', 'min'], ret: 'qty'}, 
-        multiple: 1,
-        min: 0.5
-      },
-      override: 'method_args_default'
-    };
-
     var config = {//pricelist  
       pricelist_code_current: '1a',
       pricelist_code_last: '1a', //todo sarebbe meglio in via generale
     }
     
     var method_args_vetro = {
-        method: 'maxOf', //fixed, //min
-        method_args: {values: ['tmp.item.area', 'min'], ret: 'qty'}, 
-        multiple: 1,
-        min: 0.5
+        func: 'maxOf', //fixed, //min
+        func_args: {values: ['tmp.item.area', 'min'], ret: 'qty'},
+        f_args: {
+            fields: ['tmp.item.area'],
+            values: ['min'],
+            ret: 'qty'
+        },
+        multiple: 0.01,
+        min: 0.5,
+        max: null
       };
     
     var tipoVetro = [{
       name: "vetro 33.1/20g/33.1be",
       code: "33.1/20g/33.1be",
-      pricelist_option_code: '33.1/20g/33.1be',
-      method: 'area4CalcPrices',
-      method_args: method_args_vetro,
-      method_args_default: {min: 0.7},
-      //pricelist_option_price: null,
-      //pricelist_option_cost: null,
-      //qty: null, //todo sarà la chiamata alla funzione area4CalcPrices('max', method_args);
-      //_qty: area4CalcPrices,
-    //price
-      //price: null, //null
-      //price_pricelist: null, // todo to calculate
-      //price_custom: null,
-    //cost
-      //cost_pricelist: null, // todo to calculate
+      po_code: '33.1/20g/33.1be',
+      po_method: 'compare',
+      po_method_args: method_args_vetro,
+      po_method_args_default: {min: 0.7},
     }, {
       name: "vetro 44.1/16g/44.1be",
       code: "44.1/16g/44.1be",
-      pricelist_option_code: '44.1/16g/44.1be',
-      method: 'area4CalcPrices',
-      method_args: method_args_vetro,
-      method_args_default: {min: 0.7},
+      po_code: '44.1/16g/44.1be',
+      po_method: 'compare',
+      po_method_args: method_args_vetro,
+      po_method_args_default: {min: 0.7},
       
     }, {
       name: "vetro 55.1/14g/55.1be",
       code: "55.1/14g/55.1be",
-      pricelist_option_code: '55.1/14g/55.1be',
-      method: 'area4CalcPrices',
-      method_args: method_args_vetro,
-      method_args_default: {min: 0.7},
-      
+      po_code: '55.1/14g/55.1be',
+      po_method: 'compare',
+      po_method_args: method_args_vetro,
+      po_method_args_default: {min: 0.7},
     }];
 
     var method_args_profilo = {
@@ -124,41 +88,61 @@
     var tipoProfilo = [{
       name: "profilo a L",
       code: "profilo_l",
-      pricelist_option_code: 'profilo_l',
-      method: 'simplePercentage',
-      method_args: {
-        multiple: 1,
-        percentage: 0
+      po_code: 'profilo_l',
+      po_method: 'math',
+      po_method_args: {
+          func: 'percentage',
+          f_args: {
+              fields: ['tmp.item.price']
+          },
+          //percentage: 0,
+          multiple: 1,
+          min: null,
+          max: null,
       },
-      method_args_default: null,
+      po_method_args_default: null,
       
     }, {
       name: "profilo Z 45",
       code: "profilo_z45",
-      pricelist_option_code: 'profilo_z45',
-      method: 'simplePercentage',
-      method_args: {
+      po_code: 'profilo_z45',
+      po_method: 'math',
+      po_method_args: {
+        func: 'percentage',
+        f_args: {
+            fields: ['tmp.item.price']
+        },
+        //percentage: 0.2,
         multiple: 1,
-        percentage: 0.05
+        min: null,
+        max: null,
       },
-      method_args_default: null,
+      po_method_args_default: null,
       
     }, {
       name: "profilo Z 58",
       code: "profilo_z58",
-      pricelist_option_code: 'profilo_z58',
-      method: 'simplePercentage',
-      method_args: {
-        multiple: 1,
-        percentage: 0.07
-      },
-      method_args_default: null,
-      
+      po_code: 'profilo_z58',
+        po_method: 'math',
+        po_method_args: {
+            func: 'percentage',
+            f_args: {
+                fields: ['tmp.item.price']
+            },
+            //percentage: 0.8,
+            multiple: 1,
+            min: null,
+            max: null,
+        },
+        po_method_args_default: null,
     }];
 
+    //detail
     var sss = [{
       name: "Profilo",
       code: "PRFL",
+      mode: 'mode-select',
+      method: null,
       options: tipoProfilo,
       selected: {
         code: 'profilo_l'
@@ -166,11 +150,38 @@
     }, {
       name: "Vetro",
       code: "VTR",
+      mode: 'mode-select',
+      method: null,
       options: tipoVetro,
       selected: {
         code: '44.1/16g/44.1be'
       }
-    }];
+    }, {
+        name: "i1",
+        code: "i1",
+        mode: 'mode-input',
+        method: null,
+        value: 'valore default',
+        selected: {
+            price_mode: 'manual',
+            price_manual: 11.00
+        }
+    }
+];
+/*
+ , {
+ name: "vrn",
+ code: "vrn",
+ mode: 'auto',
+ method: 'elaborateFields',
+ method_args: {
+ func: 'sum',
+ func_args: {
+ fields: ['tmp.item.price', 'PRFL']
+ }
+ }
+ }
+ */
 
     function opt(list, item) {
       return list[1];
@@ -233,7 +244,7 @@
       code: 'area',
       value: null,
       type: 'number',
-      mode: 'calc',
+      mode: 'auto',// 'calc',
       method: 'calc',
       watch: 'tmp.item.L * tmp.item.H',
       method_args: "tmp.item.L * tmp.item.H / 1000000"
@@ -241,27 +252,28 @@
       name: 'perimeter 4L',
       code: 'perimeter4',
       value: null,
-      mode: 'calc',
       type: 'number',
+      mode: 'auto', //'calc',
       method: 'calc',
-      watch: 'tmp.item.L * tmp.item.H',
-      method_args: "tmp.item.L + tmp.item.L + tmp.item.H + tmp.item.H"
+      watch: 'tmp.item.area',
+      method_args: "(tmp.item.L + tmp.item.L + tmp.item.H + tmp.item.H) / 1000"
     }, {
       name: 'perimeter 3L',
       code: 'perimeter3',
-      mode: 'calc',
       type: 'number',
+      mode: 'auto',
       method: 'calc',
-      watch: 'tmp.item.L * tmp.item.H',
-      method_args: "tmp.item.L + tmp.item.H + tmp.item.H"
+      watch: 'tmp.item.area',
+      method_args: "(tmp.item.L + tmp.item.H + tmp.item.H) / 1000"
     }, {
       name: 'Build grid2D code',
       code: 'gridCode2D100',
-      mode: 'gluecode',
+      mode: 'auto',
       type: 'text',
-      method: "str_lpad",
-      watch: "tmp.item.L * tmp.item.H",
+      method: "gluecode",
+      watch: "tmp.item.area",
       method_args: {
+        func: 'str_lpad',
         lngth: 8,
         str: '0',
         elements: [{

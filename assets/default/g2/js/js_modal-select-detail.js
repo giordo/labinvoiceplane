@@ -27,7 +27,7 @@ angular.module('ui.bootstrap.demo').controller('ModalSelectDetailCtrl', function
     theitem.price = null;
     theitem.total_price = null;
     theitem.total_row_price = null;
-    
+
     angular.forEach(theitem.needs_default, function(value, key) {
       angular.forEach(theitem.needs, function(v, k) {
         if (v.code == value.code) {
@@ -35,7 +35,7 @@ angular.module('ui.bootstrap.demo').controller('ModalSelectDetailCtrl', function
         }
       });
     });
-    
+
     angular.forEach(theitem.details_default, function(value, key) {
       angular.forEach(theitem.details, function(v, k) {
         if (v.code == value.code) {
@@ -44,33 +44,32 @@ angular.module('ui.bootstrap.demo').controller('ModalSelectDetailCtrl', function
       })
     });
   }
-  
-  //todo: si potrebbe generalizzare needs --> needs_detail
+
   angular.forEach(theitem.needs, function(value, key) {
     if (value.mode == 'input' || value.mode == 'hidden') {
       theitem[value.code] = value.value;
     }
-    if (value.mode == 'calc') {
-      if (value.method == 'calc') {
-        $scope.$watch(value.watch, function(v) {
-          theitem[value.code] = $scope.$eval(value.method_args);
-        });
-      }
-    }
-    if (value.mode == 'gluecode') {
-      if (value.method == 'str_lpad') {
-        $scope.$watch(value.watch, function(v) {
-          var p = '';
-          angular.forEach(value.method_args.elements, function(va, ka) {
-            var n = round($scope.$eval(va.target), va.round, 0);
-            p = p + padLeft(n, value.method_args.lngth, value.method_args.str);
-          });
-          theitem[value.code] = p;
-        });
-      }
+    if (value.mode == 'auto') {
+        if (value.method == 'calc') {
+            $scope.$watch(value.watch, function(v) {
+                theitem[value.code] = $scope.$eval(value.method_args);
+            });
+        }
+        else if (value.method == 'gluecode') {
+            if (value.method_args.func == 'str_lpad') {
+                $scope.$watch(value.watch, function(v) {
+                    var p = '';
+                    angular.forEach(value.method_args.elements, function(va, ka) {
+                        var n = round($scope.$eval(va.target), va.round, 0);
+                        p = p + padLeft(n, value.method_args.lngth, value.method_args.str);
+                    });
+                    theitem[value.code] = p;
+                });
+            }
+        }
     }
   });
-      
+
   angular.forEach(theitem.details, function(detail, detailKey) {
     angular.forEach(detail.options, function(option, optionKey) {
       if(theitem.isnew !== false){
@@ -83,63 +82,29 @@ angular.module('ui.bootstrap.demo').controller('ModalSelectDetailCtrl', function
         option.price_mode = 'current'; // 'current', 'older', 'manual', 'nullValue'
         option.price= null;
       }
-      
-      if(option.method == 'area4CalcPrices') {
-        option = setOptionPriceCost(option);
-        $scope.$watch('tmp.item.area',function(newValue, oldValue) {
-		  var now = new Date();
-          var ma = option.method_args;
-          if(newValue) {
-            if(ma.method == 'maxOf'){
-              var arr = [];
-              angular.forEach(ma.method_args.values, function(a, n) {
-                if(a.indexOf('.') > 0){
-                  arr.push($scope.$eval(a));
-                }
-                else{
-                  arr.push(ma[a]);
-                }
+
+      if(option.po_method == 'compare') {
+          option = setOptionPriceCost(option);
+
+          angular.forEach(option.po_method_args.f_args.fields, function(field, fieldKey) {
+              $scope.$watch(field,function(newValue, oldValue) {
+                  if(newValue)
+                    $scope.compare(detail, option);
               });
-              option[ma.method_args.ret] = getMaxOfArray(arr);
-            }
-            else if(ma.method == 'minOf'){
-              
-            }
-            else if(ma.method == 'fixed'){
-              option[ma.method_args.ret] = $scope.$eval(a);
-            }
-            else if(ma.method == 'real'){
-              option[ma.method_args.ret] = theitem.area;
-            }
-          
-            option.price_current = Math.round(option[ma.method_args.ret] * option.pricelist_current * 100) / 100;
-            option.price_older = Math.round(option[ma.method_args.ret] * option.pricelist_older * 100) / 100;
-            $scope.getOptionPrice(option);
-			console.log('option.code:' + option.code);
-			console.log('detail.selected.code:' + detail.selected.code);
-			console.log('theitem.isnew:' + theitem.isnew);
-            //if(option.code == detail.selected.code && theitem.isnew !== false){				
-			if(option.code == detail.selected.code){				
-				detail.selected = option;
-            }
-          }
-        });
+          });
       }
-      else if(option.method == 'simplePercentage'){
+      else if(option.po_method == 'math'){
         option = setOptionPriceCost(option);
-      
-        $scope.$watch('tmp.item.price',function(newValue, oldValue) {
-          option.price_current = Math.round(newValue * option.pricelist_current * 100) / 100;
-          option.price_older = Math.round(newValue * option.pricelist_older * 100) / 100;
-          
-          $scope.getOptionPrice(option);
-		  //if(option.code == detail.selected.code  && theitem.isnew !== false){
-		  if(option.code == detail.selected.code){			
-			detail.selected = option;
-          }
-        });
+          angular.forEach(option.po_method_args.f_args.fields, function(field, fieldKey) {
+              $scope.$watch(field,function(newValue, oldValue) {
+                  if(newValue) {
+                      if(option.po_method_args.func == 'percentage')
+                          $scope.percentage(detail, option);
+                  }
+              });
+          });
       }
-      else if(option.method == 'sumOfFields'){
+      else if(option.po_method == 'sumOfFields'){
         option = setOptionPriceCost(option);
         //todo : all method is todo
         $scope.$watch('tmp.item.price',function(newValue, oldValue) {
@@ -147,8 +112,8 @@ angular.module('ui.bootstrap.demo').controller('ModalSelectDetailCtrl', function
           option.price_older = Math.round(newValue * option.pricelist_older * 100) / 100;
           $scope.getOptionPrice(option);
           //if(option.code == detail.selected.code  && theitem.isnew !== false){
-		  if(option.code == detail.selected.code){
-			detail.selected = option;
+          if(option.code == detail.selected.code){
+            detail.selected = option;
           }
         });
       }
@@ -156,7 +121,69 @@ angular.module('ui.bootstrap.demo').controller('ModalSelectDetailCtrl', function
     });
     //end detail
   });
-  
+
+    $scope.percentage = function(detail, option){
+        var newValue = 0;
+
+        angular.forEach(option.po_method_args.f_args.fields, function(field, fieldKey) {
+            newValue = newValue + $scope.$eval(field);
+        });
+
+        option.price_current = Math.round(newValue * option.pricelist_current * 100) / 100;
+        option.price_older = Math.round(newValue * option.pricelist_older * 100) / 100;
+
+        $scope.getOptionPrice(option);
+
+        if(option.code == detail.selected.code){
+            detail.selected = option;
+        }
+    };
+
+  $scope.compare = function(detail, option){
+      var ma = option.po_method_args;
+      if(ma.func == 'maxOf' || ma.func == 'minOf'){
+          var arr = [];
+
+          angular.forEach(ma.func_args.values, function(a, n) {
+              if(a.indexOf('.') > 0){
+                  arr.push($scope.$eval(a));
+              }
+              else{
+                  arr.push(ma[a]);
+              }
+          });
+
+          angular.forEach(ma.func_args.fields, function(a, n) {
+              if(a.indexOf('.') > 0){
+                  arr.push($scope.$eval(a));
+              }
+              else{
+                  arr.push(ma[a]);
+              }
+          });
+
+          if(ma.func == 'maxOf')
+            option[ma.func_args.ret] = getMaxOfArray(arr);
+          else if(ma.func == 'minOf')
+              option[ma.func_args.ret] = getMinOfArray(arr);
+
+      }
+      else if(ma.func == 'fixed'){
+          option[ma.func_args.ret] = $scope.$eval(a);
+      }
+      else if(ma.func == 'real'){
+          option[ma.func_args.ret] = theitem.area;
+      }
+
+      option.price_current = Math.round(option[ma.func_args.ret] * option.pricelist_current * 100) / 100;
+      option.price_older = Math.round(option[ma.func_args.ret] * option.pricelist_older * 100) / 100;
+      $scope.getOptionPrice(option);
+
+      if(option.code == detail.selected.code){
+          detail.selected = option;
+      }
+  };
+
   $scope.$watch('tmp.item.price_mode', function(newValue, oldValue) {
     $scope.getOptionPrice(theitem);
   });
@@ -191,7 +218,7 @@ angular.module('ui.bootstrap.demo').controller('ModalSelectDetailCtrl', function
   });
   
   $scope.getOptionPrice = function (option){
-	var retprice = null;
+    var retprice = null;
     switch(option.price_mode) {
         case 'older':
             retprice = option.price_older;
@@ -205,9 +232,10 @@ angular.module('ui.bootstrap.demo').controller('ModalSelectDetailCtrl', function
         case 'nullValue':
             retprice = option.price_nullValue;
             break;
-    }	
-    option.price = retprice;    
-	$rootScope.$broadcast('changeTotalRow', $scope.item);
+    }
+    option.price = retprice;
+
+    $rootScope.$broadcast('changeTotalRow', $scope.item);
   };
   
   $scope.openPopover = function(idx){
@@ -217,12 +245,12 @@ angular.module('ui.bootstrap.demo').controller('ModalSelectDetailCtrl', function
   $scope.$watch('tmp.item.area',function(newValue, oldValue) {
     var retprice = -1;
     var a = theitem.area;
-    
+
     if(a == 0.6)
             retprice = 1200;
-    else if(a < 0.6) 
+    else if(a < 0.6)
             retprice = 1100;
-           
+
     else if(a > 0.6)
             retprice = 1300;
 
@@ -233,7 +261,7 @@ angular.module('ui.bootstrap.demo').controller('ModalSelectDetailCtrl', function
   $scope.tmp = tmp;
   
   $scope.updateDetail = function(detail){
-	$rootScope.$broadcast('changeTotalRow', $scope.item);
+    $rootScope.$broadcast('changeTotalRow', $scope.item);
   };
   
   $scope.ok = function () {

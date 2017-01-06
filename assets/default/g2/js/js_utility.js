@@ -1,5 +1,14 @@
-function getMaxOfArray(numArray) {
+    function timestamp(){
+        var d = new Date();
+        return d.getTime();
+    };
+
+    function getMaxOfArray(numArray) {
       return Math.max.apply(null, numArray);
+    }
+
+    function getMinOfArray(numArray) {
+        return Math.min.apply(null, numArray);
     }
     
     function padLeft(nr, n, str) {
@@ -29,7 +38,7 @@ function getMaxOfArray(numArray) {
         {code: 'profilo_l', price: 0.0, cost: 0},
         {code: 'profilo_z45', price: 0.6, cost: 0.6},
         {code: 'profilo_z58', price: 0.14, cost: 0.14}
-        ];
+      ];
         
       angular.forEach(listino, function(riga, rigaKey) {
         if(riga.code == option.code){
